@@ -30,6 +30,11 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		D127F6182D849E7B008D0C33 /* screenshots */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = screenshots;
+			sourceTree = "<group>";
+		};
 		D17EFB332D6F4E3100CBF308 /* AirBnbClone */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = AirBnbClone;
@@ -65,6 +70,7 @@
 		D17EFB282D6F4E3100CBF308 = {
 			isa = PBXGroup;
 			children = (
+				D127F6182D849E7B008D0C33 /* screenshots */,
 				D17EFB322D6F4E3100CBF308 /* Products */,
 				D17EFB332D6F4E3100CBF308 /* AirBnbClone */,
 			);
@@ -96,6 +102,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				D127F6182D849E7B008D0C33 /* screenshots */,
 				D17EFB332D6F4E3100CBF308 /* AirBnbClone */,
 			);
 			name = AirBnbClone;

@@ -78,6 +78,7 @@ struct ListingDeatilsView: View {
                 .font(.caption)
             }
             .frame(maxWidth:.infinity, alignment: .leading)
+            .padding()
             Divider()
             
             //Host info view
