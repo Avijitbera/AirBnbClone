@@ -22,17 +22,33 @@ struct DestinationSearchView:View {
     
     @State private var selectedOptions :DestinationSearchOptions = .location
     
+    @State private var startDate = Date()
+    @State private var endDate = Date()
+    @State private var numGuests = 0
+    
     var body: some View {
         VStack{
-            Button{
-                withAnimation(.snappy){
-                    show.toggle()
+            HStack{
+                Button{
+                    withAnimation(.snappy){
+                        show.toggle()
+                    }
+                } label: {
+                    Image(systemName: "xmark.circle")
+                        .imageScale(.large)
+                        .foregroundStyle(.black)
                 }
-            } label: {
-                Image(systemName: "xmark.circle")
-                    .imageScale(.large)
+                Spacer()
+                if !destination.isEmpty {
+                    Button("Clear") {
+                        destination = ""
+                    }
                     .foregroundStyle(.black)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                }
             }
+            .padding()
             VStack(alignment: .leading){
                 if selectedOptions == .location {
                     Text("Where to?")
@@ -61,24 +77,35 @@ struct DestinationSearchView:View {
                 }
                
             }
-            .padding()
+            .modifier(CollapsibleDestinationViewModifier())
             .frame(height: selectedOptions == .location ? 120 : 64)
-            .background(.white)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
-            .padding()
-            .shadow(radius: 10)
+            
             .onTapGesture {
                 withAnimation(.snappy){
                     selectedOptions = .location
                 }
             }
             
-            VStack {
+            VStack(alignment: .leading) {
                 if selectedOptions == .dates {
-                    HStack {
-                        Text("Show expanded view")
-                        Spacer()
+                    Text("When's your trip?")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                    
+                    VStack{
+                        DatePicker("From",
+                                   selection: $startDate,
+                                   displayedComponents: .date)
+                        
+                        Divider()
+                        
+                        DatePicker("To",
+                                   selection: $endDate,
+                                   displayedComponents: .date)
                     }
+                    .foregroundStyle(.gray)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
                 }else{
                     CollapesedPickerView(
                         title: "When", description: "Add dates"
@@ -86,12 +113,9 @@ struct DestinationSearchView:View {
                    
                 }
             }
-            .padding()
-            .frame(height: selectedOptions == .dates ? 120 : 64)
-            .background(.white)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
-            .padding()
-            .shadow(radius: 10)
+            .modifier(CollapsibleDestinationViewModifier())
+            .frame(height: selectedOptions == .dates ? 180 : 64)
+            
             .onTapGesture {
                 withAnimation(.snappy){
                     selectedOptions = .dates
@@ -101,22 +125,27 @@ struct DestinationSearchView:View {
             VStack {
                 
                 if selectedOptions == .guests {
-                    HStack {
-                        Text("Show expanded view")
-                        Spacer()
+                    Text("Who's coming?")
+                        .font(.title)
+                        .fontWeight(.semibold)
+                    Stepper {
+                        Text("\(numGuests) Adults")
+                    } onIncrement: {
+                        numGuests += 1
+                    } onDecrement: {
+                        guard numGuests > 0 else { return }
+                        numGuests -= 1
                     }
+                    
                 }else{
                     CollapesedPickerView(
                         title: "Who", description: "Add guests"
                     )
                 }
             }
-            .padding()
+            .modifier(CollapsibleDestinationViewModifier())
             .frame(height: selectedOptions == .guests ? 120 : 64)
-            .background(.white)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
-            .padding()
-            .shadow(radius: 10)
+            
             .onTapGesture {
                 withAnimation(.snappy){
                     selectedOptions = .guests
@@ -125,7 +154,7 @@ struct DestinationSearchView:View {
             
            
             
-            
+            Spacer()
             
             
             
@@ -138,6 +167,18 @@ struct DestinationSearchView:View {
     DestinationSearchView(
         show: .constant(false)
     )
+}
+
+
+struct CollapsibleDestinationViewModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .padding()
+            .background(.white)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .padding()
+            .shadow(radius: 10)
+    }
 }
 
 struct CollapesedPickerView: View {

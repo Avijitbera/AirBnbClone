@@ -11,6 +11,8 @@ import SwiftUI
 struct ExploreView: View {
     
     @State private var showDestinationSearchView = false
+    @StateObject var viewModel = ExplorerViewModel(serive: ExploreService())
+    
     var body: some View {
         NavigationStack {
             if(showDestinationSearchView){
@@ -25,9 +27,9 @@ struct ExploreView: View {
                         }
                     LazyVStack {
                         
-                        ForEach(0 ... 10, id: \.self){ listing in
-                            NavigationLink(value:listing){
-                                ListingItemView()
+                        ForEach(viewModel.listings, id: \.id){ listing in
+                            NavigationLink(value: listing) {
+                                ListingItemView(listing: listing)
                                     .frame(height: 400)
                                     .clipShape(RoundedRectangle(cornerRadius: 10))
                             }
@@ -35,8 +37,8 @@ struct ExploreView: View {
                     }
                     .padding()
                 }
-                .navigationDestination(for: Int.self){ listing in
-                    ListingDeatilsView()
+                .navigationDestination(for: Listing.self){ listing in
+                    ListingDeatilsView(listing: listing)
                         .toolbar(.hidden)
                         .navigationBarBackButtonHidden()
                     
